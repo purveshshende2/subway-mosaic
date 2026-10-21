@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light" />
+<title>subway — what's on your mind?</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <canvas id="stage" aria-hidden="true"></canvas>
+
+  <main class="ui">
+    <div class="topbar">
+      <button class="pill" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <svg class="pill__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.1" stroke="currentColor" stroke-width="1.25"/>
+          <path d="M8 4.6V8l2.4 1.7" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="pill__label">History</span>
+        <svg class="pill__chev" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M4.5 6.5 8 10l3.5-3.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="center">
+      <h1 class="headline">what's on your mind?</h1>
+
+      <form class="composer" autocomplete="off">
+        <div class="composer__icons">
+          <button class="iconbtn" type="button" aria-label="Add attachment">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 4.2v11.6M4.2 10h11.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="iconbtn" type="button" aria-label="Use microphone">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="7.4" y="2.6" width="5.2" height="9" rx="2.6" stroke="currentColor" stroke-width="1.35"/>
+              <path d="M4.9 9.2a5.1 5.1 0 0 0 10.2 0M10 14.3v3.1" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <input class="composer__input" id="ask" type="text" placeholder="Ask anything…" aria-label="Ask anything" />
+
+        <div class="composer__right">
+          <span class="hint"><b>&#9166;</b> send<span class="hint__dot">·</span><b>&#8679;</b> newline</span>
+          <button class="send" type="submit" aria-label="Send">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M6 14 14 6M14 6H8.6M14 6v5.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
