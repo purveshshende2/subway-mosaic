@@ -266,7 +266,7 @@ export class Scene {
   /* Spread the opening frame out so the station never starts empty. */
   seed() {
     const r = this.rand;
-    const n = 12;
+    const n = 9;
 
     // even slots across the pavement, shuffled, so nobody overlaps
     const slots = [];
@@ -286,7 +286,7 @@ export class Scene {
     }
 
     // and a few just stepping out of the stairwell
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       const dir = r() < 0.5 ? -1 : 1;
       this.people.push(
         createPerson(rng((r() * 1e9) | 0), {

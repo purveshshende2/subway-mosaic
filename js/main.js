@@ -91,6 +91,31 @@ function debugOverlay() {
   return debugEl;
 }
 
+/* the pavement line, in device pixels from the top of the viewport */
+function floorY() {
+  const cover = Math.max(canvas.width / scene.canvas.width, canvas.height / scene.canvas.height);
+  const offY = (canvas.height - scene.canvas.height * cover) * 0.5;
+  return offY + scene.groundY * cover;
+}
+
+function draw(t) {
+  scene.update(1 / 60, t);
+  scene.draw(t);
+  makeBlur();
+
+  mosaic.render({
+    sceneCanvas: scene.canvas,
+    blurCanvas: blurChain[1].canvas,
+    softCanvas: blurChain[2].canvas,
+    atlas,
+    time: t,
+    cell,
+    floorY: floorY(),
+    pan: reduceMotion ? 0 : Math.sin(t * 0.12) * 16,
+    echo: reduceMotion ? 0.12 : 0.24,
+  });
+}
+
 function frame(now) {
   const t0 = performance.now();
   const dt = Math.min(0.05, (now - last) / 1000);
@@ -125,11 +150,6 @@ function frame(now) {
     dc.fillText(`${fps.toFixed(0)} fps  ·  ${scene.people.length} people`, 16, 34);
   }
 
-  // pavement line, in device pixels from the top of the viewport
-  const cover = Math.max(canvas.width / scene.canvas.width, canvas.height / scene.canvas.height);
-  const offY = (canvas.height - scene.canvas.height * cover) * 0.5;
-  const floorY = offY + scene.groundY * cover;
-
   mosaic.render({
     sceneCanvas: scene.canvas,
     blurCanvas: blurChain[1].canvas,
@@ -137,11 +157,10 @@ function frame(now) {
     atlas,
     time,
     cell,
-    floorY,
+    floorY: floorY(),
     pan: reduceMotion ? 0 : Math.sin(time * 0.12) * 16,
     echo: reduceMotion ? 0.12 : 0.24,
   });
-
   cpu += performance.now() - t0;
   cpuWindow += dt;
   if (cpuWindow > 2) {
@@ -174,6 +193,28 @@ function start() {
     return;
   }
   build();
+
+  // recording mode: a deterministic, frame-by-stepped run that posts
+  // each frame to the dev server.  See js/capture.js.
+  if (location.search.includes("export")) {
+    import("./capture.js")
+      .then(({ runCapture }) =>
+        runCapture({
+          scene,
+          mosaic,
+          makeBlur,
+          floorY,
+          blurChain,
+          atlas,
+          cell,
+          frames: 150,
+          fps: 30,
+        })
+      )
+      .catch((err) => console.error("[capture]", err));
+    return;
+  }
+
   requestAnimationFrame((t) => { last = t; frame(t); });
 }
 let resizeTimer;
