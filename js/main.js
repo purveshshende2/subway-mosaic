@@ -193,6 +193,27 @@ function start() {
     return;
   }
   build();
+
+  // recording mode
+  if (location.search.includes("export")) {
+    import("./capture.js")
+      .then(({ runCapture }) =>
+        runCapture({
+          scene,
+          mosaic,
+          makeBlur,
+          floorY,
+          blurChain,
+          atlas,
+          cell,
+          frames: 150,
+          fps: 30,
+        })
+      )
+      .catch((err) => console.error("[capture]", err));
+    return;
+  }
+
   requestAnimationFrame((t) => { last = t; frame(t); });
 }
 let resizeTimer;
