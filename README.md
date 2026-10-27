@@ -1,31 +1,22 @@
 # subway — mosaic
 
-![the effect running](media/demo.gif)
+A scene quantised into a grid of tiny character chips, with a soft blurred
+ghost drifting behind it and a mirrored reflection in the pavement below.
 
-A rebuild of the effect from `Downloads/shark.mp4`: a scene quantised into a
-grid of tiny character chips, with a soft blurred ghost drifting behind it
-and a mirrored reflection in the pavement below.
-
-Instead of sharks, the scene is a **slice of street level outside a subway
-entrance**: a stairwell with a SUBWAY roundel, and a stream of commuters
-walking out of the stairs in different clothes.
-
-![the site](media/screenshot.png)
-
-▶ **[media/demo.mp4](media/demo.mp4)** — 5 seconds, 1280×720, 30 fps.
+The scene is a slice of street level outside a subway entrance: a
+stairwell with a SUBWAY roundel, and a stream of commuters walking out of
+the stairs in different clothes.
 
 ```
 subway-mosaic/
 ├── index.html
-├── serve.py            tiny dev server (also logs frame stats, records frames)
-├── media/              screenshot + demo
+├── serve.py            tiny dev server (also logs frame stats)
 ├── css/styles.css
 └── js/
     ├── main.js      loop, resize, blur chain
     ├── scene.js     the "photo": station, stairwell, crowd
     ├── person.js    procedurally drawn pedestrians (profile)
     ├── mosaic.js    WebGL chip shader
-    ├── capture.js   frame recorder (loaded only for ?export=1)
     └── atlas.js     8×8 glyph atlas
 ```
 
@@ -95,21 +86,4 @@ the dev server.
 
 `prefers-reduced-motion` stops the camera drift and softens the ghost.
 
-## Recording a demo
 
-`js/capture.js` renders the animation frame by frame at a fixed timestep,
-reads each frame back off the WebGL canvas, draws the interface over it and
-POSTs the result to the dev server, which writes it to `media/frames/`.
-
-```sh
-python3 serve.py 8777
-rm -rf media/frames && mkdir -p media/frames
-open "http://localhost:8777/?export=1"      # writes 150 jpgs
-
-cd media
-ffmpeg -framerate 30 -i frames/%04d.jpg \
-       -vf "crop=1280:712:0:0,scale=1280:720" \
-       -c:v libx264 -pix_fmt yuv420p -crf 20 -movflags +faststart demo.mp4
-```
-
-`media/demo.gif` is the same run downscaled to 520px at 10 fps.

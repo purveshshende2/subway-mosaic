@@ -241,25 +241,6 @@ export class Mosaic {
 
   /* --- frame ------------------------------------------------------- */
 
-  /* --- frame grab, for recording a demo --------------------------- */
-
-  readPixels() {
-    const gl = this.gl;
-    const w = this.canvas.width, h = this.canvas.height;
-    const buf = new Uint8Array(w * h * 4);
-    gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
-
-    // gl reads bottom-up; flip into a canvas-shaped ImageData
-    const img = new ImageData(w, h);
-    const dst = img.data;
-    const row = w * 4;
-    for (let y = 0; y < h; y++) {
-      const src = (h - 1 - y) * row;
-      dst.set(buf.subarray(src, src + row), y * row);
-    }
-    return img;
-  }
-
   render({ sceneCanvas, blurCanvas, softCanvas, atlas, time, cell, dpr, floorY, pan, echo }) {
     const gl = this.gl;
     const canvas = this.canvas;
@@ -309,10 +290,5 @@ export class Mosaic {
     gl.uniform1f(this.u.echo, echo);
 
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-    // keep a handle on the last textures so the recorder can reuse them
-    this.blurCanvas = blurCanvas;
-    this.softCanvas = softCanvas;
-    this.cell = cell;
   }
 }
